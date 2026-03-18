@@ -35,14 +35,16 @@ function extractOutputText(payload: OpenAIResponsePayload) {
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json()) as Record<string, unknown>
-    const validation = validateNutritionPlanInput(body as Partial<NutritionPlanInput>)
+    const body = (await request.json()) as Partial<NutritionPlanInput>
+    const validation = validateNutritionPlanInput(body)
 
     if (!validation.ok) {
       return NextResponse.json({ error: validation.error }, { status: 400 })
     }
 
-    if (!process.env.OPENAI_API_KEY) {
+    const apiKey = process.env.OPENAI_API_KEY
+
+    if (!apiKey) {
       return NextResponse.json(
         {
           error:
@@ -56,7 +58,7 @@ export async function POST(request: Request) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
         model: "gpt-5-mini",
@@ -72,7 +74,8 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           error:
-            payload.error?.message ?? "No fue posible generar el plan nutricional.",
+            payload.error?.message ??
+            "No fue posible generar el plan nutricional.",
         },
         { status: apiResponse.status },
       )
@@ -81,7 +84,11 @@ export async function POST(request: Request) {
     const plan = extractOutputText(payload)
 
     if (!plan) {
-      console.error("OpenAI respondió sin texto utilizable:", JSON.stringify(payload, null, 2))
+      console.error(
+        "OpenAI respondió sin texto utilizable:",
+        JSON.stringify(payload, null, 2),
+      )
+
       return NextResponse.json(
         { error: "No fue posible generar el plan nutricional." },
         { status: 502 },
@@ -91,6 +98,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ plan })
   } catch (error) {
     console.error("nutrition-plan-route", error)
+
     return NextResponse.json(
       { error: "No fue posible generar el plan nutricional." },
       { status: 500 },
