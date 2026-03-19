@@ -3,5 +3,4 @@
   <polygon points="600,120 1040,400 600,680 160,400" fill="#ffdf00"/>
   <circle cx="600" cy="400" r="170" fill="#002776"/>
   <path d="M450 410c90-60 210-60 300 0" stroke="#fff" stroke-width="22" fill="none"/>
-  <text x="600" y="720" text-anchor="middle" font-size="110" font-family="Arial, sans-serif" fill="#fff">BR</text>
 </svg>

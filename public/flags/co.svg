@@ -2,5 +2,4 @@
   <rect width="1200" height="400" fill="#fcd116"/>
   <rect y="400" width="1200" height="200" fill="#003893"/>
   <rect y="600" width="1200" height="200" fill="#ce1126"/>
-  <text x="600" y="450" text-anchor="middle" font-size="120" font-family="Arial, sans-serif" fill="#111">CO</text>
 </svg>

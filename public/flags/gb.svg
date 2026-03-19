@@ -8,5 +8,4 @@
   <rect y="300" width="1200" height="200" fill="#fff"/>
   <rect x="540" width="120" height="800" fill="#c8102e"/>
   <rect y="340" width="1200" height="120" fill="#c8102e"/>
-  <text x="600" y="730" text-anchor="middle" font-size="110" font-family="Arial, sans-serif" fill="#fff">GB</text>
 </svg>
