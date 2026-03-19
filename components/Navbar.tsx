@@ -6,6 +6,7 @@ import {
   Calendar,
   ChefHat,
   Globe2,
+  House,
   LayoutDashboard,
   MessageSquare,
   PlusCircle,
@@ -19,6 +20,7 @@ import { useI18n, type Language } from "@/lib/i18n"
 import { useUser } from "@/lib/userContext"
 
 const navItems = [
+  { href: "/", key: "nav.home", icon: House },
   { href: "/marketplace", key: "nav.marketplace", icon: Store },
   { href: "/videos", key: "nav.videos", icon: Video },
   { href: "/tendencias", key: "nav.trends", icon: TrendingUp },

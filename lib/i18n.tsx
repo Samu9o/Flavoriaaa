@@ -22,6 +22,7 @@ const translations: Record<Language, TranslationDictionary> = {
     "language.fr": "Francés",
 
     "nav.brand": "Flavoria Market",
+    "nav.home": "Inicio",
     "nav.marketplace": "Marketplace",
     "nav.videos": "Videos",
     "nav.trends": "Tendencias",
@@ -145,6 +146,7 @@ const translations: Record<Language, TranslationDictionary> = {
     "language.fr": "French",
 
     "nav.brand": "Flavoria Market",
+    "nav.home": "Home",
     "nav.marketplace": "Marketplace",
     "nav.videos": "Videos",
     "nav.trends": "Trends",
@@ -268,6 +270,7 @@ const translations: Record<Language, TranslationDictionary> = {
     "language.fr": "Français",
 
     "nav.brand": "Flavoria Market",
+    "nav.home": "Accueil",
     "nav.marketplace": "Marketplace",
     "nav.videos": "Vidéos",
     "nav.trends": "Tendances",
