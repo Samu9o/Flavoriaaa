@@ -34,8 +34,7 @@ export const cuisineCountries: CuisineCountry[] = [
         timeMinutes: 40,
         servings: 4,
         difficulty: "Media",
-        image:
-          "https://images.unsplash.com/photo-1543339494-b4cd4f7ba686?w=1200&auto=format&fit=crop",
+        image: "/recipes/mac-and-cheese.svg",
         ingredients: [
           "400 g de pasta corta",
           "2 cucharadas de mantequilla",
@@ -64,8 +63,7 @@ export const cuisineCountries: CuisineCountry[] = [
         timeMinutes: 20,
         servings: 3,
         difficulty: "Fácil",
-        image:
-          "https://images.unsplash.com/photo-1528207776546-365bb710ee93?w=1200&auto=format&fit=crop",
+        image: "/recipes/pancakes.svg",
         ingredients: [
           "1 taza de harina",
           "1 cucharada de azúcar",
@@ -101,8 +99,7 @@ export const cuisineCountries: CuisineCountry[] = [
         timeMinutes: 70,
         servings: 6,
         difficulty: "Media",
-        image:
-          "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=1200&auto=format&fit=crop",
+        image: "/recipes/ajiaco.jpg",
         ingredients: [
           "1 pechuga de pollo",
           "3 tipos de papa (criolla, pastusa, sabanera)",
@@ -129,8 +126,7 @@ export const cuisineCountries: CuisineCountry[] = [
         timeMinutes: 35,
         servings: 4,
         difficulty: "Fácil",
-        image:
-          "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=1200&auto=format&fit=crop",
+        image: "/recipes/arepa.jpg",
         ingredients: [
           "4 arepas blancas",
           "2 tazas de pollo cocido desmechado",
@@ -164,8 +160,7 @@ export const cuisineCountries: CuisineCountry[] = [
         timeMinutes: 45,
         servings: 4,
         difficulty: "Media",
-        image:
-          "https://images.unsplash.com/photo-1579208575657-c595a05383b7?w=1200&auto=format&fit=crop",
+        image: "/recipes/fishandchips.jpg",
         ingredients: [
           "4 filetes de pescado blanco",
           "4 papas grandes",
@@ -191,8 +186,7 @@ export const cuisineCountries: CuisineCountry[] = [
         timeMinutes: 55,
         servings: 5,
         difficulty: "Media",
-        image:
-          "https://images.unsplash.com/photo-1604908176997-4311b7a6f785?w=1200&auto=format&fit=crop",
+        image: "/recipes/shepherd.png",
         ingredients: [
           "500 g de carne molida",
           "1 cebolla picada",
@@ -228,8 +222,7 @@ export const cuisineCountries: CuisineCountry[] = [
         timeMinutes: 50,
         servings: 4,
         difficulty: "Fácil",
-        image:
-          "https://images.unsplash.com/photo-1625944230945-1b7dd3b949ab?w=1200&auto=format&fit=crop",
+        image: "/recipes/ratatouille.jpg",
         ingredients: [
           "1 berenjena",
           "1 zucchini",
@@ -256,8 +249,7 @@ export const cuisineCountries: CuisineCountry[] = [
         timeMinutes: 60,
         servings: 6,
         difficulty: "Media",
-        image:
-          "https://images.unsplash.com/photo-1464306076886-da185f6a9d05?w=1200&auto=format&fit=crop",
+        image: "/recipes/quiche.jpg",
         ingredients: [
           "1 base de masa quebrada",
           "200 g de tocino",
@@ -292,8 +284,7 @@ export const cuisineCountries: CuisineCountry[] = [
         timeMinutes: 55,
         servings: 6,
         difficulty: "Media",
-        image:
-          "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=1200&auto=format&fit=crop",
+        image: "/recipes/empanada.jpg",
         ingredients: [
           "12 discos de empanada",
           "500 g de carne molida",
@@ -320,8 +311,7 @@ export const cuisineCountries: CuisineCountry[] = [
         timeMinutes: 15,
         servings: 8,
         difficulty: "Fácil",
-        image:
-          "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=1200&auto=format&fit=crop",
+        image: "/recipes/chimichurri.jpg",
         ingredients: [
           "1 taza de perejil fresco",
           "3 dientes de ajo",
@@ -355,8 +345,7 @@ export const cuisineCountries: CuisineCountry[] = [
         timeMinutes: 90,
         servings: 8,
         difficulty: "Difícil",
-        image:
-          "https://images.unsplash.com/photo-1598514982841-5f3cf7f28ab6?w=1200&auto=format&fit=crop",
+        image: "/recipes/feijoada.jpg",
         ingredients: [
           "500 g de frijol negro",
           "300 g de costilla de cerdo",
@@ -383,8 +372,7 @@ export const cuisineCountries: CuisineCountry[] = [
         timeMinutes: 35,
         servings: 5,
         difficulty: "Fácil",
-        image:
-          "https://images.unsplash.com/photo-1613145993488-809fdad5f904?w=1200&auto=format&fit=crop",
+        image: "/recipes/pao.jpg",
         ingredients: [
           "2 tazas de almidón de yuca",
           "1 taza de queso rallado",
