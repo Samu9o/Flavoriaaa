@@ -3,6 +3,7 @@ import {
   Calendar,
   ChefHat,
   Map,
+  NotebookPen,
   MessageSquare,
   PlusCircle,
   Sparkles,
@@ -48,6 +49,13 @@ const menuItems: MenuItem[] = [
     subtitle: "Ingresa origen y destino para saber como llegar.",
     icon: Map,
     accent: "from-teal-400 to-cyan-600",
+  },
+  {
+    href: "/comunidad-recetas",
+    title: "Recetas",
+    subtitle: "Ver todas las recetas publicadas, opinar y dar retroalimentacion.",
+    icon: NotebookPen,
+    accent: "from-indigo-400 to-violet-600",
   },
   {
     href: "/ia",

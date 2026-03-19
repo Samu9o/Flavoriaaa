@@ -107,7 +107,7 @@ export default function RecipePage() {
       {/* Título y descripción */}
       <div className="mt-4">
         <h1 className="text-2xl font-bold">{recipe.title}</h1>
-        <p className="text-gray-600">{recipe.description}</p>
+        <p className="text-gray-900">{recipe.description}</p>
       </div>
 
       {/* Autor y Like */}
@@ -147,10 +147,10 @@ export default function RecipePage() {
 
       {/* Ingredientes */}
       <div className="bg-white p-6 rounded-2xl border border-gray-200 mt-4">
-        <h2 className="font-bold mb-3">Ingredientes</h2>
+        <h2 className="font-bold mb-3 text-gray-900">Ingredientes</h2>
         <ul className="space-y-1">
           {recipe.ingredients.map((i, idx) => (
-            <li key={idx} className="flex items-start gap-2">
+            <li key={idx} className="flex items-start gap-2 text-gray-900">
               <span className="text-orange-500">•</span>
               {i}
             </li>
@@ -160,14 +160,14 @@ export default function RecipePage() {
 
       {/* Preparación */}
       <div className="bg-white p-6 rounded-2xl border border-gray-200 mt-4">
-        <h2 className="font-bold mb-3">Preparación</h2>
+        <h2 className="font-bold mb-3 text-gray-900">Preparación</h2>
         <div className="space-y-3">
           {recipe.instructions.map((s, i) => (
             <div key={i} className="flex gap-3">
               <div className="bg-orange-500 text-white w-6 h-6 flex items-center justify-center rounded-full text-xs">
                 {i + 1}
               </div>
-              <p>{s}</p>
+              <p className="text-gray-900">{s}</p>
             </div>
           ))}
         </div>

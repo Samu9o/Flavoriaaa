@@ -27,7 +27,7 @@ export default async function CountryRecipeDetailPage({ params }: PageProps) {
           ← Volver a recetas de {country.name}
         </Link>
         <h1 className="text-3xl font-bold text-green-900">{recipe.title}</h1>
-        <p className="max-w-3xl text-sm text-gray-600">{recipe.description}</p>
+        <p className="max-w-3xl text-sm text-gray-900">{recipe.description}</p>
       </header>
 
       <FallbackImage
@@ -37,7 +37,7 @@ export default async function CountryRecipeDetailPage({ params }: PageProps) {
         fallbackSrc="/maps/placeholder-recipe.svg"
       />
 
-      <section className="mb-8 grid gap-3 rounded-xl border border-gray-200 bg-white p-5 text-sm text-gray-700 sm:grid-cols-3">
+      <section className="mb-8 grid gap-3 rounded-xl border border-gray-200 bg-white p-5 text-sm text-gray-900 sm:grid-cols-3">
         <p>
           <strong>Tiempo:</strong> {recipe.timeMinutes} min
         </p>
@@ -52,7 +52,7 @@ export default async function CountryRecipeDetailPage({ params }: PageProps) {
       <section className="grid gap-8 lg:grid-cols-2">
         <article className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
           <h2 className="mb-4 text-xl font-semibold text-gray-900">Ingredientes</h2>
-          <ul className="list-disc space-y-2 pl-5 text-sm text-gray-700">
+          <ul className="list-disc space-y-2 pl-5 text-sm text-gray-900">
             {recipe.ingredients.map((item) => (
               <li key={item}>{item}</li>
             ))}
@@ -61,7 +61,7 @@ export default async function CountryRecipeDetailPage({ params }: PageProps) {
 
         <article className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
           <h2 className="mb-4 text-xl font-semibold text-gray-900">Paso a paso</h2>
-          <ol className="list-decimal space-y-3 pl-5 text-sm text-gray-700">
+          <ol className="list-decimal space-y-3 pl-5 text-sm text-gray-900">
             {recipe.steps.map((step) => (
               <li key={step}>{step}</li>
             ))}
