@@ -2,6 +2,7 @@ import Link from "next/link"
 import {
   Calendar,
   ChefHat,
+  Map,
   MessageSquare,
   PlusCircle,
   Sparkles,
@@ -40,6 +41,13 @@ const menuItems: MenuItem[] = [
     subtitle: "Revisa el mapa y lideres por localidad.",
     icon: TrendingUp,
     accent: "from-cyan-400 to-blue-600",
+  },
+  {
+    href: "/guia",
+    title: "Mapa Guia",
+    subtitle: "Ingresa origen y destino para saber como llegar.",
+    icon: Map,
+    accent: "from-teal-400 to-cyan-600",
   },
   {
     href: "/ia",
