@@ -1,21 +1,24 @@
 "use client"
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useUser } from "@/lib/userContext"
 import { Calendar, MapPin, Users, Plus, Pencil, X } from "lucide-react"
 
 type TipoEvento = "taller" | "feria" | "charla"
 
 type Evento = {
-  id: number
+  id: string
   nombre: string
   tipo: TipoEvento
   fecha: string
   ubicacion: string
   cupos: number
-  cuposRestantes: number
   cancelado: boolean
   creadoPor: string
+  creadoPorId: string
+  inscritos: string[]
 }
+
+const EVENTOS_STORAGE_KEY = "flavoria-eventos-v1"
 
 const tipoColor: Record<TipoEvento, string> = {
   taller: "bg-orange-100 text-orange-600",
@@ -25,32 +28,35 @@ const tipoColor: Record<TipoEvento, string> = {
 
 const eventosIniciales: Evento[] = [
   {
-    id: 1,
+    id: "evt-1",
     nombre: "Taller de pasta fresca",
     tipo: "taller",
     fecha: "2025-08-15",
     ubicacion: "Bogotá, Centro Gourmet",
     cupos: 10,
-    cuposRestantes: 3,
     cancelado: false,
-    creadoPor: "chef_ana",
+    creadoPor: "Ana Martínez",
+    creadoPorId: "ana-martinez",
+    inscritos: ["carlos-ruiz", "andres-perez", "laura-mendez"],
   },
   {
-    id: 2,
+    id: "evt-2",
     nombre: "Feria de especias",
     tipo: "feria",
     fecha: "2025-09-01",
     ubicacion: "Medellín, Plaza Mayor",
     cupos: 50,
-    cuposRestantes: 0,
     cancelado: false,
-    creadoPor: "chef_luis",
+    creadoPor: "María González",
+    creadoPorId: "maria-gonzalez",
+    inscritos: Array.from({ length: 50 }, (_, index) => `seed-${index + 1}`),
   },
 ]
 
 export default function EventosPage() {
-  const { sesion, rol } = useUser()
+  const { sesion, rol, currentUser } = useUser()
   const [eventos, setEventos] = useState<Evento[]>(eventosIniciales)
+  const [isHydrated, setIsHydrated] = useState(false)
   const [showForm, setShowForm] = useState(false)
   const [editando, setEditando] = useState<Evento | null>(null)
 
@@ -67,28 +73,58 @@ export default function EventosPage() {
 
   const puedeCrear = sesion && (rol === "pro_curious" || rol === "chef")
 
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(EVENTOS_STORAGE_KEY)
+      if (saved) {
+        const parsed = JSON.parse(saved) as Evento[]
+        if (Array.isArray(parsed)) {
+          setEventos(parsed)
+        }
+      }
+    } catch {
+      setEventos(eventosIniciales)
+    } finally {
+      setIsHydrated(true)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!isHydrated) return
+    localStorage.setItem(EVENTOS_STORAGE_KEY, JSON.stringify(eventos))
+  }, [eventos, isHydrated])
+
   const handleGuardar = () => {
     if (!form.nombre.trim() || !form.fecha || !form.ubicacion.trim() || !form.cupos) return
+    if (!currentUser) return
 
     if (editando) {
       setEventos((prev) =>
         prev.map((e) =>
           e.id === editando.id
-            ? { ...e, nombre: form.nombre, tipo: form.tipo, fecha: form.fecha, ubicacion: form.ubicacion, cupos: Number(form.cupos) }
+            ? {
+                ...e,
+                nombre: form.nombre,
+                tipo: form.tipo,
+                fecha: form.fecha,
+                ubicacion: form.ubicacion,
+                cupos: Math.max(Number(form.cupos), e.inscritos.length),
+              }
             : e
         )
       )
     } else {
       const nuevo: Evento = {
-        id: Date.now(),
+        id: `evt-${Date.now()}`,
         nombre: form.nombre,
         tipo: form.tipo,
         fecha: form.fecha,
         ubicacion: form.ubicacion,
         cupos: Number(form.cupos),
-        cuposRestantes: Number(form.cupos),
         cancelado: false,
-        creadoPor: "Tú",
+        creadoPor: currentUser.name,
+        creadoPorId: currentUser.id,
+        inscritos: [],
       }
       setEventos((prev) => [...prev, nuevo].sort((a, b) => a.fecha.localeCompare(b.fecha)))
     }
@@ -110,24 +146,29 @@ export default function EventosPage() {
     setShowForm(true)
   }
 
-  const handleCancelar = (id: number) => {
+  const handleCancelar = (id: string) => {
     setEventos((prev) =>
       prev.map((e) => (e.id === id ? { ...e, cancelado: true } : e))
     )
   }
 
-  const handleInscribirse = (id: number) => {
+  const handleInscribirse = (id: string) => {
     if (!sesion) return alert("Debes iniciar sesión para inscribirte")
+    if (!currentUser) return
+
     setEventos((prev) =>
       prev.map((e) =>
-        e.id === id && e.cuposRestantes > 0
-          ? { ...e, cuposRestantes: e.cuposRestantes - 1 }
+        e.id === id && !e.cancelado && e.inscritos.length < e.cupos && !e.inscritos.includes(currentUser.id)
+          ? { ...e, inscritos: [...e.inscritos, currentUser.id] }
           : e
       )
     )
   }
 
-  const eventosFiltrados = [...eventos].sort((a, b) => a.fecha.localeCompare(b.fecha))
+  const eventosFiltrados = useMemo(
+    () => [...eventos].sort((a, b) => a.fecha.localeCompare(b.fecha)),
+    [eventos],
+  )
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -215,86 +256,93 @@ export default function EventosPage() {
 
         {/* LISTA DE EVENTOS */}
         <div className="space-y-4">
-          {eventosFiltrados.map((evento) => (
-            <div
-              key={evento.id}
-              className={`bg-white rounded-2xl p-5 shadow-sm ${evento.cancelado ? "opacity-60" : ""}`}
-            >
-              <div className="flex justify-between items-start">
-                <div className="flex-1">
+          {eventosFiltrados.map((evento) => {
+            const cuposRestantes = Math.max(evento.cupos - evento.inscritos.length, 0)
+            const yaInscrito = currentUser ? evento.inscritos.includes(currentUser.id) : false
+            const puedeInscribirse = sesion && !evento.cancelado && cuposRestantes > 0 && !yaInscrito
 
-                  {/* Nombre + badges */}
-                  <div className="flex items-center gap-2 flex-wrap mb-1">
-                    <h3 className="font-bold text-gray-900">{evento.nombre}</h3>
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${tipoColor[evento.tipo]}`}>
-                      {evento.tipo}
-                    </span>
-                    {evento.cancelado && (
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-red-100 text-red-600">
-                        Cancelado
+            return (
+              <div
+                key={evento.id}
+                className={`bg-white rounded-2xl p-5 shadow-sm ${evento.cancelado ? "opacity-60" : ""}`}
+              >
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    {/* Nombre + badges */}
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                      <h3 className="font-bold text-gray-900">{evento.nombre}</h3>
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${tipoColor[evento.tipo]}`}>
+                        {evento.tipo}
                       </span>
+                      {evento.cancelado && (
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-red-100 text-red-600">
+                          Cancelado
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Detalles */}
+                    <div className="flex flex-wrap gap-4 text-sm text-gray-500 mt-2">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-4 h-4" />
+                        {evento.fecha}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <MapPin className="w-4 h-4" />
+                        {evento.ubicacion}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Users className="w-4 h-4" />
+                        {cuposRestantes === 0 ? "Evento lleno" : `${cuposRestantes} cupos`}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Botones */}
+                  <div className="flex flex-col gap-2 ml-4">
+                    {!evento.cancelado && (
+                      <>
+                        <button
+                          onClick={() => handleInscribirse(evento.id)}
+                          disabled={!puedeInscribirse}
+                          className={`px-3 py-1.5 rounded-xl text-sm font-medium transition ${
+                            !puedeInscribirse
+                              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                              : "bg-orange-500 text-white hover:bg-orange-600"
+                          }`}
+                        >
+                          {!sesion
+                            ? "Inicia sesión"
+                            : yaInscrito
+                              ? "Ya inscrito"
+                              : cuposRestantes === 0
+                                ? "Evento lleno"
+                                : "Inscribirse"}
+                        </button>
+
+                        {sesion && currentUser && evento.creadoPorId === currentUser.id && (
+                          <>
+                            <button
+                              onClick={() => handleEditar(evento)}
+                              className="flex items-center gap-1 text-sm text-gray-500 hover:text-orange-500"
+                            >
+                              <Pencil className="w-3 h-3" /> Editar
+                            </button>
+                            <button
+                              onClick={() => handleCancelar(evento.id)}
+                              className="flex items-center gap-1 text-sm text-gray-500 hover:text-red-500"
+                            >
+                              <X className="w-3 h-3" /> Cancelar
+                            </button>
+                          </>
+                        )}
+                      </>
                     )}
                   </div>
-
-                  {/* Detalles */}
-                  <div className="flex flex-wrap gap-4 text-sm text-gray-500 mt-2">
-                    <span className="flex items-center gap-1">
-                      <Calendar className="w-4 h-4" />
-                      {evento.fecha}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <MapPin className="w-4 h-4" />
-                      {evento.ubicacion}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Users className="w-4 h-4" />
-                      {evento.cuposRestantes === 0
-                        ? "Evento lleno"
-                        : `${evento.cuposRestantes} cupos`}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Botones */}
-                <div className="flex flex-col gap-2 ml-4">
-                  {!evento.cancelado && (
-                    <>
-                      {/* Inscribirse */}
-                      <button
-                        onClick={() => handleInscribirse(evento.id)}
-                        disabled={evento.cuposRestantes === 0 || !sesion}
-                        className={`px-3 py-1.5 rounded-xl text-sm font-medium transition ${
-                          evento.cuposRestantes === 0
-                            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                            : "bg-orange-500 text-white hover:bg-orange-600"
-                        }`}
-                      >
-                        {evento.cuposRestantes === 0 ? "Evento lleno" : "Inscribirse"}
-                      </button>
-
-                      {/* Editar y cancelar — solo el creador */}
-                      {sesion && evento.creadoPor === "Tú" && (
-                        <>
-                          <button
-                            onClick={() => handleEditar(evento)}
-                            className="flex items-center gap-1 text-sm text-gray-500 hover:text-orange-500"
-                          >
-                            <Pencil className="w-3 h-3" /> Editar
-                          </button>
-                          <button
-                            onClick={() => handleCancelar(evento.id)}
-                            className="flex items-center gap-1 text-sm text-gray-500 hover:text-red-500"
-                          >
-                            <X className="w-3 h-3" /> Cancelar
-                          </button>
-                        </>
-                      )}
-                    </>
-                  )}
                 </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
       </div>
