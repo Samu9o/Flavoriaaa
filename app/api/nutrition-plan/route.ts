@@ -24,7 +24,8 @@ type OpenAIResponsePayload = {
 
 function isMockModeEnabled() {
   const value = (process.env.USE_AI_MOCK ?? "").trim().toLowerCase()
-  return value === "1" || value === "true" || value === "yes" || value === "on"
+  if (!value) return true
+  return !(value === "0" || value === "false" || value === "no" || value === "off")
 }
 
 function buildMockPlan(input: NutritionPlanInput) {
