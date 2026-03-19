@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="Bandera de Argentina">
+  <rect width="1200" height="266.66" fill="#74acdf"/>
+  <rect y="266.66" width="1200" height="266.66" fill="#fff"/>
+  <rect y="533.33" width="1200" height="266.67" fill="#74acdf"/>
+  <circle cx="600" cy="400" r="55" fill="#f6b40e"/>
+  <text x="600" y="620" text-anchor="middle" font-size="110" font-family="Arial, sans-serif" fill="#111">AR</text>
+</svg>

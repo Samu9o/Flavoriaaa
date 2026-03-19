@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="Bandera del Reino Unido">
+  <rect width="1200" height="800" fill="#012169"/>
+  <path d="M0 0 500 0 1200 466 1200 800 700 800 0 333Z" fill="#fff"/>
+  <path d="M1200 0 700 0 0 466 0 800 500 800 1200 333Z" fill="#fff"/>
+  <path d="M0 0 400 0 1200 533 1200 800 800 800 0 267Z" fill="#c8102e"/>
+  <path d="M1200 0 800 0 0 533 0 800 400 800 1200 267Z" fill="#c8102e"/>
+  <rect x="500" width="200" height="800" fill="#fff"/>
+  <rect y="300" width="1200" height="200" fill="#fff"/>
+  <rect x="540" width="120" height="800" fill="#c8102e"/>
+  <rect y="340" width="1200" height="120" fill="#c8102e"/>
+  <text x="600" y="730" text-anchor="middle" font-size="110" font-family="Arial, sans-serif" fill="#fff">GB</text>
+</svg>

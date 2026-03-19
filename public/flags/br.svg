@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="Bandera de Brasil">
+  <rect width="1200" height="800" fill="#009c3b"/>
+  <polygon points="600,120 1040,400 600,680 160,400" fill="#ffdf00"/>
+  <circle cx="600" cy="400" r="170" fill="#002776"/>
+  <path d="M450 410c90-60 210-60 300 0" stroke="#fff" stroke-width="22" fill="none"/>
+  <text x="600" y="720" text-anchor="middle" font-size="110" font-family="Arial, sans-serif" fill="#fff">BR</text>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Imagen de pais</title>
+  <desc id="desc">Imagen de respaldo para paises</desc>
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#g)"/>
+  <circle cx="600" cy="340" r="120" fill="#fff" opacity="0.25"/>
+  <rect x="380" y="520" width="440" height="24" rx="12" fill="#fff" opacity="0.9"/>
+  <rect x="460" y="560" width="280" height="18" rx="9" fill="#fff" opacity="0.8"/>
+  <text x="600" y="355" text-anchor="middle" font-size="90" font-family="Arial, sans-serif" fill="#fff">🌍</text>
+  <text x="600" y="640" text-anchor="middle" font-size="42" font-family="Arial, sans-serif" font-weight="700" fill="#fff">Pais</text>
+</svg>

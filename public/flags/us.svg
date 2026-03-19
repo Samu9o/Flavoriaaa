@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="Bandera de Estados Unidos">
+  <rect width="1200" height="800" fill="#b22234"/>
+  <g fill="#fff">
+    <rect y="61.5" width="1200" height="61.5"/>
+    <rect y="184.5" width="1200" height="61.5"/>
+    <rect y="307.5" width="1200" height="61.5"/>
+    <rect y="430.5" width="1200" height="61.5"/>
+    <rect y="553.5" width="1200" height="61.5"/>
+    <rect y="676.5" width="1200" height="61.5"/>
+  </g>
+  <rect width="500" height="430" fill="#3c3b6e"/>
+  <text x="250" y="240" text-anchor="middle" font-size="140" font-family="Arial, sans-serif" fill="#fff">US</text>
+</svg>

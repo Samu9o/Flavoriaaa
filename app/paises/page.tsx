@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { cuisineCountries } from "@/lib/worldCuisine"
+import FallbackImage from "@/components/FallbackImage"
 
 export default function PaisesPage() {
   return (
@@ -18,10 +19,11 @@ export default function PaisesPage() {
             key={country.slug}
             className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
           >
-            <img
+            <FallbackImage
               src={country.image}
               alt={country.name}
               className="h-44 w-full object-cover"
+              fallbackSrc="/maps/placeholder-country.svg"
             />
             <div className="space-y-3 p-5">
               <div className="flex items-center justify-between">
@@ -32,6 +34,17 @@ export default function PaisesPage() {
               </div>
               <p className="text-sm text-gray-600">{country.intro}</p>
               <p className="text-xs text-gray-500">{country.recipes.length} recetas</p>
+              <div className="grid grid-cols-2 gap-2">
+                {country.recipes.slice(0, 2).map((recipe) => (
+                  <FallbackImage
+                    key={recipe.slug}
+                    src={recipe.image}
+                    alt={recipe.title}
+                    className="h-20 w-full rounded-lg object-cover"
+                    fallbackSrc="/maps/placeholder-recipe.svg"
+                  />
+                ))}
+              </div>
               <Link
                 href={`/paises/${country.slug}`}
                 className="inline-flex rounded-lg bg-green-700 px-4 py-2 text-sm font-semibold text-white hover:bg-green-800"

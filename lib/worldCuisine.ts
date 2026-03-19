@@ -25,7 +25,7 @@ export const cuisineCountries: CuisineCountry[] = [
     name: "Estados Unidos",
     flag: "US",
     intro: "Recetas clásicas americanas, rápidas y con mucho sabor.",
-    image: "https://flagcdn.com/w1280/us.png",
+    image: "/flags/us.svg",
     recipes: [
       {
         slug: "mac-and-cheese-horneado",
@@ -92,7 +92,7 @@ export const cuisineCountries: CuisineCountry[] = [
     name: "Colombia",
     flag: "CO",
     intro: "Sabores tradicionales colombianos, caseros y reconfortantes.",
-    image: "https://flagcdn.com/w1280/co.png",
+    image: "/flags/co.svg",
     recipes: [
       {
         slug: "ajiaco-bogotano",
@@ -155,7 +155,7 @@ export const cuisineCountries: CuisineCountry[] = [
     name: "Inglaterra",
     flag: "GB",
     intro: "Platos británicos clásicos, sencillos y perfectos para compartir.",
-    image: "https://flagcdn.com/w1280/gb.png",
+    image: "/flags/gb.svg",
     recipes: [
       {
         slug: "fish-and-chips",
@@ -219,7 +219,7 @@ export const cuisineCountries: CuisineCountry[] = [
     name: "Francia",
     flag: "FR",
     intro: "Recetas francesas elegantes y llenas de técnica.",
-    image: "https://flagcdn.com/w1280/fr.png",
+    image: "/flags/fr.svg",
     recipes: [
       {
         slug: "ratatouille-clasico",
@@ -283,7 +283,7 @@ export const cuisineCountries: CuisineCountry[] = [
     name: "Argentina",
     flag: "AR",
     intro: "Sabores argentinos tradicionales, carne y masas irresistibles.",
-    image: "https://flagcdn.com/w1280/ar.png",
+    image: "/flags/ar.svg",
     recipes: [
       {
         slug: "empanadas-carne",
@@ -346,7 +346,7 @@ export const cuisineCountries: CuisineCountry[] = [
     name: "Brazil",
     flag: "BR",
     intro: "Cocina brasileña vibrante, ideal para compartir en familia.",
-    image: "https://flagcdn.com/w1280/br.png",
+    image: "/flags/br.svg",
     recipes: [
       {
         slug: "feijoada-tradicional",

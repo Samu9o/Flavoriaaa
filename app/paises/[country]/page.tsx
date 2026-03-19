@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { getCountryBySlug } from "@/lib/worldCuisine"
+import FallbackImage from "@/components/FallbackImage"
 
 type PageProps = {
   params: Promise<{ country: string }>
@@ -30,7 +31,12 @@ export default async function CountryRecipesPage({ params }: PageProps) {
             key={recipe.slug}
             className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
           >
-            <img src={recipe.image} alt={recipe.title} className="h-44 w-full object-cover" />
+            <FallbackImage
+              src={recipe.image}
+              alt={recipe.title}
+              className="h-44 w-full object-cover"
+              fallbackSrc="/maps/placeholder-recipe.svg"
+            />
             <div className="space-y-3 p-5">
               <h2 className="text-lg font-semibold text-gray-900">{recipe.title}</h2>
               <p className="text-sm text-gray-600">{recipe.description}</p>
