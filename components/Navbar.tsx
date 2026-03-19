@@ -22,6 +22,7 @@ const navItems = [
   { href: "/", key: "nav.marketplace", icon: Store },
   { href: "/videos", key: "nav.videos", icon: Video },
   { href: "/tendencias", key: "nav.trends", icon: TrendingUp },
+  { href: "/paises", key: "nav.countries", icon: ChefHat },
   { href: "/ia", key: "nav.ai", icon: Sparkles },
   { href: "/subir", key: "nav.upload", icon: PlusCircle },
   { href: "/foros", key: "nav.forums", icon: MessageSquare },
