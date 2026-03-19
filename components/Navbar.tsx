@@ -19,7 +19,7 @@ import { useI18n, type Language } from "@/lib/i18n"
 import { useUser } from "@/lib/userContext"
 
 const navItems = [
-  { href: "/", key: "nav.marketplace", icon: Store },
+  { href: "/marketplace", key: "nav.marketplace", icon: Store },
   { href: "/videos", key: "nav.videos", icon: Video },
   { href: "/tendencias", key: "nav.trends", icon: TrendingUp },
   { href: "/paises", key: "nav.countries", icon: ChefHat },

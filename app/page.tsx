@@ -21,7 +21,7 @@ type MenuItem = {
 
 const menuItems: MenuItem[] = [
   {
-    href: "/",
+    href: "/marketplace",
     title: "Marketplace",
     subtitle: "Explora restaurantes, menus y compras.",
     icon: Store,
