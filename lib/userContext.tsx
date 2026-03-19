@@ -125,6 +125,20 @@ const DEFAULT_STATE = {
 
 const UserContext = createContext<UserContextType | null>(null)
 
+function mergeById<T extends { id: string }>(base: T[], stored: T[]) {
+  const merged = new Map<string, T>()
+
+  for (const item of base) {
+    merged.set(item.id, item)
+  }
+
+  for (const item of stored) {
+    merged.set(item.id, item)
+  }
+
+  return Array.from(merged.values())
+}
+
 function hydrateStore(saved: string | null): AppStore {
   if (!saved) return DEFAULT_STORE
 
@@ -134,11 +148,23 @@ function hydrateStore(saved: string | null): AppStore {
     return {
       sesion: parsed.sesion ?? DEFAULT_STORE.sesion,
       currentUserId: parsed.currentUserId ?? DEFAULT_STORE.currentUserId,
-      communityUsers: parsed.communityUsers ?? DEFAULT_STORE.communityUsers,
+      communityUsers: mergeById(
+        DEFAULT_STORE.communityUsers,
+        parsed.communityUsers ?? [],
+      ),
       marketplace: {
-        restaurants: parsed.marketplace?.restaurants ?? DEFAULT_STORE.marketplace.restaurants,
-        menuItems: parsed.marketplace?.menuItems ?? DEFAULT_STORE.marketplace.menuItems,
-        orders: parsed.marketplace?.orders ?? DEFAULT_STORE.marketplace.orders,
+        restaurants: mergeById(
+          DEFAULT_STORE.marketplace.restaurants,
+          parsed.marketplace?.restaurants ?? [],
+        ),
+        menuItems: mergeById(
+          DEFAULT_STORE.marketplace.menuItems,
+          parsed.marketplace?.menuItems ?? [],
+        ),
+        orders: mergeById(
+          DEFAULT_STORE.marketplace.orders,
+          parsed.marketplace?.orders ?? [],
+        ),
       },
     }
   } catch {

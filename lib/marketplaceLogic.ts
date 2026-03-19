@@ -306,10 +306,21 @@ export function getTopRestaurantsBySales(
 export function buildBogotaTrendPoints(
   restaurants: RestaurantEntity[],
   orders: OrderEntity[],
-  limit = 6,
+  limit = 12,
 ): BogotaTrendPoint[] {
-  return getTopRestaurantsBySales(restaurants, orders, restaurants.length)
-    .filter((item) => BOGOTA_LOCALITY_POINTS[item.locality])
+  const rankedRestaurants = getTopRestaurantsBySales(restaurants, orders, restaurants.length).filter(
+    (item) => item.orders > 0 && BOGOTA_LOCALITY_POINTS[item.locality],
+  )
+
+  const leadersByLocality = new Map<string, TopRestaurant>()
+
+  for (const restaurant of rankedRestaurants) {
+    if (!leadersByLocality.has(restaurant.locality)) {
+      leadersByLocality.set(restaurant.locality, restaurant)
+    }
+  }
+
+  return Array.from(leadersByLocality.values())
     .slice(0, limit)
     .map((item) => ({
       ...item,
