@@ -31,6 +31,7 @@ export default function AIPage() {
   const [form, setForm] = useState<NutritionFormState>(defaultForm)
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState("")
+  const [isMock, setIsMock] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const update = <K extends keyof NutritionFormState>(key: K, value: NutritionFormState[K]) => {
@@ -61,18 +62,21 @@ export default function AIPage() {
         }),
       })
 
-      const payload = (await response.json()) as { error?: string; plan?: string }
+      const payload = (await response.json()) as { error?: string; plan?: string; mock?: boolean }
 
       if (!response.ok || !payload.plan) {
         setError(payload.error ?? t("ai.error.default"))
         setResult("")
+        setIsMock(false)
         return
       }
 
       setResult(payload.plan)
+      setIsMock(Boolean(payload.mock))
     } catch {
       setError(t("ai.error.default"))
       setResult("")
+      setIsMock(false)
     } finally {
       setLoading(false)
     }
@@ -230,9 +234,16 @@ export default function AIPage() {
             )}
 
             {result && (
-              <div className="mt-4 whitespace-pre-wrap rounded-2xl border border-gray-200 bg-gray-50 p-4 text-sm leading-7 text-gray-700">
-                {result}
-              </div>
+              <>
+                {isMock && (
+                  <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-700">
+                    {t("ai.result.mock")}
+                  </div>
+                )}
+                <div className="mt-4 whitespace-pre-wrap rounded-2xl border border-gray-200 bg-gray-50 p-4 text-sm leading-7 text-gray-700">
+                  {result}
+                </div>
+              </>
             )}
           </section>
         </aside>

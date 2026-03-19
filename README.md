@@ -41,6 +41,8 @@ Como usuario, quiero generar un **plan nutricional especializado** con OpenAI us
 - validación para evitar objetivos extremos o riesgosos
 - llamada server-side a `/api/nutrition-plan`
 - integración con la API de OpenAI mediante `OPENAI_API_KEY`
+- modo demo automático (mockup) si la API key no está configurada
+- modo demo forzado con `USE_AI_MOCK=true`
 
 ## Cuentas demo
 
@@ -52,45 +54,51 @@ Puedes cambiar entre cuentas desde la barra superior:
 - **Carlos Ruiz** → consumidor
 - **Andrés Pérez** → consumidor
 
-## Cómo ejecutar el proyecto
+## Paso a paso para ejecutar el proyecto (local)
 
-### 1. Instala Node.js
-Se recomienda **Node.js 20 o superior**.
+1. Instala Node.js (recomendado: **Node.js 20 o superior**).
 
-### 2. Entra a la carpeta del proyecto
-```bash
-cd ProyectoCiclo1-Grupo4_marketplace_entrega
-```
+2. Abre una terminal en la carpeta del proyecto.
 
-### 3. Instala dependencias
+3. Instala dependencias:
 ```bash
 npm install
 ```
 
-### 4. Ejecuta el servidor
+4. Inicia el servidor de desarrollo:
 ```bash
 npm run dev
 ```
 
-### 5. Abre la aplicación
+5. Abre la aplicación en tu navegador:
 ```text
 http://localhost:3000
+```
+
+6. (Opcional) Verifica calidad del proyecto:
+```bash
+npm run typecheck
+npm test -- --runInBand
 ```
 
 ## Cómo activar la sección de IA
 
 Crea la variable de entorno `OPENAI_API_KEY`.
 
+Si no quieres usar la API key por ahora, puedes forzar el mockup con `USE_AI_MOCK=true`.
+
 ### Opción A: archivo `.env.local`
 Crea un archivo `.env.local` en la raíz del proyecto con este contenido:
 
 ```bash
 OPENAI_API_KEY=tu_clave_aqui
+USE_AI_MOCK=true
 ```
 
 ### Opción B: PowerShell en Windows
 ```powershell
 setx OPENAI_API_KEY "tu_clave_aqui"
+setx USE_AI_MOCK "true"
 ```
 
 Luego cierra y abre de nuevo la terminal, y reinicia el servidor:
@@ -128,10 +136,84 @@ npm run dev
 npm test -- --runInBand
 ```
 
+## Evidencia de cumplimiento (3*N, i18n, a11y, IA)
+
+- Prototipos navegables: existen 9 rutas de página navegables (`app/*/page.tsx`) y se valida automáticamente el criterio `3*N` con `N=3` en `__tests__/compliance.test.ts`.
+- i18n: soporte en `es`, `en`, `fr` con selector persistente y pruebas de traducción (`__tests__/hu10.test.ts` y `__tests__/compliance.test.ts`).
+- a11y: se agregó validación automática con `jest-axe` en `__tests__/a11y.test.tsx` para navegación, IA y tendencias.
+- IA: se valida existencia de vista y backend (`app/ia/page.tsx` y `app/api/nutrition-plan/route.ts`) en `__tests__/compliance.test.ts`.
+
 ## Validación de tipos
 
 ```bash
 npm run typecheck
+```
+
+## Despliegue con Docker (paso a paso)
+
+### Opción 1: Docker (build + run)
+
+1. Verifica que Docker Desktop esté encendido.
+
+2. Construye la imagen:
+
+```bash
+docker build -t flavoria-app:latest .
+```
+
+3. Ejecuta el contenedor en modo demo IA (sin API key):
+
+```bash
+docker run -d --name flavoria-app -p 3000:3000 -e USE_AI_MOCK=true flavoria-app:latest
+```
+
+4. Abre la aplicación:
+
+```text
+http://localhost:3000
+```
+
+5. Revisa logs si necesitas diagnosticar:
+
+```bash
+docker logs -f flavoria-app
+```
+
+6. Detén y elimina el contenedor cuando termines:
+
+```bash
+docker stop flavoria-app && docker rm flavoria-app
+```
+
+### Opción 2: Docker Compose
+
+1. Levanta el servicio:
+
+```bash
+docker compose up -d --build
+```
+
+2. Verifica logs:
+
+```bash
+docker compose logs -f
+```
+
+3. Apaga el servicio:
+
+```bash
+docker compose down
+```
+
+### Variables de entorno en Docker
+
+- `USE_AI_MOCK=true`: fuerza modo mockup para IA.
+- `OPENAI_API_KEY`: opcional si luego quieres usar OpenAI real.
+
+Ejemplo para usar API real (desactivar mock):
+
+```bash
+docker run -d --name flavoria-app -p 3000:3000 -e USE_AI_MOCK=false -e OPENAI_API_KEY=tu_clave flavoria-app:latest
 ```
 
 ## Estructura relevante

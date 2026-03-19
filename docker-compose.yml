@@ -1,0 +1,13 @@
+services:
+  flavoria-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flavoria-app
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      USE_AI_MOCK: "true"
+      # OPENAI_API_KEY: "${OPENAI_API_KEY}"
+    restart: unless-stopped
