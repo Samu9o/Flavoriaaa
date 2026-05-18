@@ -29,7 +29,7 @@ export type CommunityFeedItem = {
   category: string
   createdAt: string
   href: string
-  kind: "receta" | "foro"
+  kind: "receta" | "foro" | "video" | "publicacion"
   title: string
   summary: string
 }

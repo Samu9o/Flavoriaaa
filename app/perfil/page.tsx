@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useState } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { Building2, Save, ShieldCheck, ShoppingBag, Store, Tag, UserRoundPlus } from "lucide-react"
-import { SPECIALTY_CATALOG } from "@/lib/communitySeed"
+import { COMMUNITY_FEED_ITEMS, SPECIALTY_CATALOG } from "@/lib/communitySeed"
 import { normalizeSpecialtyTags, type AccountType, type ExpertiseRole } from "@/lib/communityLogic"
 import { useUser } from "@/lib/userContext"
 
@@ -134,6 +135,13 @@ export default function PerfilPage() {
       restaurantes: myRestaurants.length,
     }
   }, [currentUser, getFollowersFor, myRestaurants.length])
+
+  const publicationCountByUser = useMemo(() => {
+    return COMMUNITY_FEED_ITEMS.reduce<Record<string, number>>((acc, item) => {
+      acc[item.authorId] = (acc[item.authorId] ?? 0) + 1
+      return acc
+    }, {})
+  }, [])
 
   const onToggleTag = (tag: string) => {
     setForm((prev) => ({
@@ -773,6 +781,54 @@ export default function PerfilPage() {
           </div>
         </section>
       )}
+
+      <section id="comunidad-perfiles" className="mt-6 rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="mb-4">
+          <p className="text-sm font-semibold uppercase tracking-wide text-orange-500">Perfiles</p>
+          <h2 className="text-xl font-bold text-gray-900">Perfiles de la comunidad</h2>
+          <p className="text-sm text-gray-500">
+            Selecciona un perfil para ver su información exclusiva y publicaciones.
+          </p>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {communityUsers.map((user) => (
+            <article key={user.id} className="rounded-2xl border border-gray-200 p-4">
+              <div className="flex items-center gap-3">
+                <Image
+                  src={user.avatar}
+                  alt={user.name}
+                  width={56}
+                  height={56}
+                  className="h-14 w-14 rounded-full object-cover"
+                />
+                <div>
+                  <h3 className="font-bold text-gray-900">{user.name}</h3>
+                  <p className="text-xs text-gray-500">{accountLabel[user.accountType]}</p>
+                </div>
+              </div>
+
+              <p className="mt-3 line-clamp-2 text-sm text-gray-600">{user.bio}</p>
+
+              <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                <div className="rounded-lg bg-gray-50 px-2 py-1.5 text-gray-600">
+                  <strong className="text-gray-900">{publicationCountByUser[user.id] ?? 0}</strong> publicaciones
+                </div>
+                <div className="rounded-lg bg-gray-50 px-2 py-1.5 text-gray-600">
+                  <strong className="text-gray-900">{getFollowersFor(user.id)}</strong> seguidores
+                </div>
+              </div>
+
+              <Link
+                href={`/perfil/${user.id}`}
+                className="mt-4 inline-flex rounded-xl bg-orange-500 px-3 py-2 text-sm font-semibold text-white hover:bg-orange-600"
+              >
+                Ver perfil
+              </Link>
+            </article>
+          ))}
+        </div>
+      </section>
     </div>
   )
 }

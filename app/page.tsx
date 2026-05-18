@@ -1,153 +1,108 @@
 import Link from "next/link"
-import {
-  Calendar,
-  ChefHat,
-  Map,
-  NotebookPen,
-  MessageSquare,
-  PlusCircle,
-  Sparkles,
-  Store,
-  TrendingUp,
-  User,
-  Video,
-} from "lucide-react"
-
-type MenuItem = {
-  href: string
-  title: string
-  subtitle: string
-  icon: React.ComponentType<{ className?: string }>
-  accent: string
-}
-
-const menuItems: MenuItem[] = [
-  {
-    href: "/marketplace",
-    title: "Marketplace",
-    subtitle: "Explora restaurantes, menus y compras.",
-    icon: Store,
-    accent: "from-orange-400 to-red-500",
-  },
-  {
-    href: "/paises",
-    title: "Comida por Paises",
-    subtitle: "Descubre recetas internacionales paso a paso.",
-    icon: ChefHat,
-    accent: "from-emerald-400 to-green-600",
-  },
-  {
-    href: "/tendencias",
-    title: "Tendencias",
-    subtitle: "Revisa el mapa y lideres por localidad.",
-    icon: TrendingUp,
-    accent: "from-cyan-400 to-blue-600",
-  },
-  {
-    href: "/guia",
-    title: "Mapa Guia",
-    subtitle: "Ingresa origen y destino para saber como llegar.",
-    icon: Map,
-    accent: "from-teal-400 to-cyan-600",
-  },
-  {
-    href: "/comunidad-recetas",
-    title: "Recetas",
-    subtitle: "Ver todas las recetas publicadas, opinar y dar retroalimentacion.",
-    icon: NotebookPen,
-    accent: "from-indigo-400 to-violet-600",
-  },
-  {
-    href: "/ia",
-    title: "IA Nutricional",
-    subtitle: "Genera un plan personalizado segun tus objetivos.",
-    icon: Sparkles,
-    accent: "from-amber-300 to-orange-500",
-  },
-  {
-    href: "/videos",
-    title: "Videos",
-    subtitle: "Aprende tecnicas y recetas en formato visual.",
-    icon: Video,
-    accent: "from-fuchsia-400 to-pink-600",
-  },
-  {
-    href: "/foros",
-    title: "Foros",
-    subtitle: "Comparte dudas y conversa con la comunidad.",
-    icon: MessageSquare,
-    accent: "from-violet-400 to-indigo-600",
-  },
-  {
-    href: "/eventos",
-    title: "Eventos",
-    subtitle: "Encuentra actividades y encuentros gastronomicos.",
-    icon: Calendar,
-    accent: "from-sky-400 to-cyan-600",
-  },
-  {
-    href: "/subir",
-    title: "Subir Contenido",
-    subtitle: "Publica recetas, platos y novedades.",
-    icon: PlusCircle,
-    accent: "from-lime-400 to-emerald-600",
-  },
-  {
-    href: "/perfil",
-    title: "Perfil",
-    subtitle: "Gestiona tu cuenta y tus preferencias.",
-    icon: User,
-    accent: "from-rose-400 to-red-600",
-  },
-]
+import { ArrowRight, ChefHat, ShoppingBag, Store } from "lucide-react"
+import { PlatformCarousel } from "@/components/PlatformCarousel"
 
 export default function HomePage() {
   return (
-    <main className="relative isolate min-h-screen overflow-hidden bg-[#fff8ef] px-4 py-14 sm:px-8">
-      <div className="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-orange-300/40 blur-3xl" />
-      <div className="pointer-events-none absolute -right-24 top-1/3 h-80 w-80 rounded-full bg-cyan-300/30 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 left-1/3 h-64 w-64 rounded-full bg-emerald-300/30 blur-3xl" />
+    <main className="bg-[#0d0500]">
 
-      <section className="mx-auto flex max-w-6xl flex-col items-center text-center">
-        <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-orange-500 to-red-600 text-white shadow-xl">
-          <ChefHat className="h-10 w-10" />
-        </div>
-        <h1
-          className="text-5xl font-black tracking-tight text-[#271300] sm:text-6xl"
-          style={{ fontFamily: "'Trebuchet MS', 'Segoe UI', sans-serif" }}
-        >
-          FLAVORIA
-        </h1>
-        <p className="mt-3 max-w-2xl text-base text-[#5f3b1f] sm:text-lg">
-          Bienvenido al menu principal. Selecciona una opcion para ir a cada seccion de la
-          plataforma.
-        </p>
-      </section>
+      {/* ══ HERO ══ */}
+      <section className="hero-dark flex min-h-[88vh] flex-col items-center justify-center px-6 py-24 text-center">
+        <div className="relative z-10 mx-auto max-w-4xl">
 
-      <section className="mx-auto mt-12 grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {menuItems.map((item) => {
-          const Icon = item.icon
+          <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-orange-500/30 bg-orange-500/10 px-5 py-2 text-sm font-medium text-orange-300">
+            <ChefHat className="h-4 w-4" />
+            Gastronomía bogotana · Pedidos · Comunidad
+          </div>
 
-          return (
+          <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-[2rem] bg-gradient-to-br from-orange-500 to-red-600 shadow-2xl shadow-orange-900/60">
+            <ChefHat className="h-12 w-12 text-white" />
+          </div>
+
+          <h1 className="text-7xl font-black tracking-tight text-white sm:text-8xl md:text-9xl">
+            FLAV<span className="text-orange-500">ORIA</span>
+          </h1>
+
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-gray-400 sm:text-xl">
+            Ordena de los mejores restaurantes de Bogotá, descubre recetas y conecta con la
+            comunidad culinaria.
+          </p>
+
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <Link
-              key={item.href + item.title}
-              href={item.href}
-              className="group rounded-2xl border border-[#f0d7c0] bg-white/90 p-5 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-xl"
+              href="/marketplace"
+              className="inline-flex items-center gap-2.5 rounded-2xl bg-orange-500 px-7 py-4 text-base font-bold text-white shadow-lg shadow-orange-900/50 transition hover:scale-105 hover:bg-orange-600 hover:shadow-xl active:scale-95"
             >
-              <div
-                className={`mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${item.accent} text-white`}
-              >
-                <Icon className="h-5 w-5" />
-              </div>
-              <h2 className="text-xl font-bold text-[#2c1908]">{item.title}</h2>
-              <p className="mt-2 text-sm text-[#6b4b34]">{item.subtitle}</p>
-              <p className="mt-4 text-xs font-semibold uppercase tracking-[0.18em] text-[#d0611f]">
-                Ir a la seccion
-              </p>
+              <ShoppingBag className="h-5 w-5" />
+              Ordenar ahora
+              <ArrowRight className="h-4 w-4" />
             </Link>
-          )
-        })}
+            <Link
+              href="/perfil"
+              className="inline-flex items-center gap-2 rounded-2xl border border-white/20 bg-white/5 px-7 py-4 text-base font-semibold text-white backdrop-blur-sm transition hover:bg-white/10"
+            >
+              Crear cuenta
+            </Link>
+          </div>
+
+          <div className="mt-16 grid grid-cols-3 gap-4">
+            {[
+              { value: "8+",   label: "Restaurantes" },
+              { value: "100+", label: "Pedidos" },
+              { value: "3",    label: "Idiomas" },
+            ].map((s) => (
+              <div key={s.label} className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
+                <p className="text-2xl font-black text-orange-400 sm:text-3xl">{s.value}</p>
+                <p className="mt-1 text-xs text-gray-500 sm:text-sm">{s.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
+
+      {/* ══ MARKETPLACE CTA ══ */}
+      <section className="bg-gradient-to-r from-orange-600 to-red-600 px-6 py-12">
+        <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-6 text-white sm:flex-row">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-widest text-orange-200">Acción principal</p>
+            <h2 className="mt-1 text-3xl font-black">Marketplace de Restaurantes</h2>
+            <p className="mt-2 max-w-md text-orange-100">
+              Explora restaurantes locales, elige tu plato y realiza tu pedido al instante.
+            </p>
+          </div>
+          <Link
+            href="/marketplace"
+            className="inline-flex shrink-0 items-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-base font-bold text-orange-600 shadow-lg transition hover:scale-105 hover:shadow-xl active:scale-95"
+          >
+            <Store className="h-5 w-5" />
+            Ir al Marketplace
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </section>
+
+      {/* ══ CARRUSEL ══ */}
+      <section
+        className="px-4 py-20 sm:px-8"
+        style={{ background: "linear-gradient(180deg,#0d0500 0%,#150800 60%,#1a0a00 100%)" }}
+      >
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-12 flex flex-col items-center text-center">
+            <span className="mb-3 rounded-full border border-orange-500/30 bg-orange-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-orange-400">
+              Explora la plataforma
+            </span>
+            <h2 className="text-3xl font-black text-white sm:text-4xl">
+              Todo Flavoria en un vistazo
+            </h2>
+            <p className="mt-3 max-w-lg text-gray-400">
+              Navega con las flechas o déjate llevar — el carrusel avanza solo.
+            </p>
+          </div>
+
+          <PlatformCarousel />
+        </div>
+      </section>
+
     </main>
   )
 }

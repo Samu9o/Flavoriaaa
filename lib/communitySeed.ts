@@ -168,6 +168,18 @@ export const COMMUNITY_FEED_ITEMS: CommunityFeedItem[] = [
     title: recipe.title,
     summary: recipe.description,
   })),
+  ...recipes.map((recipe, index) => ({
+    id: `video-${recipe.id}`,
+    authorId: AUTHOR_TO_ID[recipe.author] ?? "",
+    authorName: recipe.author,
+    authorAvatar: AUTHOR_TO_AVATAR[recipe.author] ?? "https://i.pravatar.cc/150?img=5",
+    category: recipe.category,
+    createdAt: `2026-03-${String(15 + index).padStart(2, "0")}T11:30:00.000Z`,
+    href: `/videos/${recipe.id}`,
+    kind: "video" as const,
+    title: `Video: ${recipe.title}`,
+    summary: `Nuevo contenido en video publicado por ${recipe.author}.`,
+  })),
   ...forumPosts.map((post, index) => ({
     id: `forum-${post.id}`,
     authorId: AUTHOR_TO_ID[post.author] ?? "",

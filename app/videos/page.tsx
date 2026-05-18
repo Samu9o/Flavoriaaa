@@ -1,5 +1,6 @@
 "use client"
 import { useState } from "react"
+import Link from "next/link"
 import { Play, Clock, Users, Search } from "lucide-react"
 import { recipes } from "@/lib/data"
 
@@ -75,6 +76,9 @@ export default function VideosPage() {
               </div>
               <h3 className="font-bold text-gray-900 mb-1">{recipe.title}</h3>
               <p className="text-gray-500 text-sm line-clamp-2 mb-3">{recipe.description}</p>
+              <p className="text-sm text-gray-600 mb-3">
+                Publicado por <span className="font-semibold text-gray-800">{recipe.author}</span>
+              </p>
               <div className="flex items-center gap-4 text-xs text-gray-500">
                 <span className="flex items-center gap-1">
                   <Clock className="w-3.5 h-3.5" /> {recipe.time} min
@@ -83,6 +87,9 @@ export default function VideosPage() {
                   <Users className="w-3.5 h-3.5" /> {recipe.servings} porciones
                 </span>
               </div>
+              <Link href={`/videos/${recipe.id}`} className="mt-3 inline-flex text-sm font-semibold text-orange-600 hover:underline">
+                Ver solo este video
+              </Link>
             </div>
           </div>
         ))}
