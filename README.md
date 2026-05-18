@@ -13,6 +13,16 @@ Como usuario, quiero registrarme y gestionar mi perfil con **etiquetas de especi
 ### HU03
 Como usuario, quiero seguir a otros cocineros y ver sus actualizaciones en un **feed personalizado**.
 
+
+### HU04
+Como usuario, quiero crear y participar en hilos de discusión gastronómica con  publicaciones, votaciones y etiquetas, para intercambiar conocimiento entre la comunidad.
+
+### HU05
+Como usuario (Pro Curious o Chef), quiero publicar y gestionar eventos gastronómicos (talleres, ferias o charlas) y permitir que otros usuarios se inscriban a ellos, para conectar la comunidad.
+
+### HU06
+Como usuario, quiero obtener distintivos y niveles de reputación según mi participación, para reconocer la calidad de mis aportes dentro de la comunidad.
+
 ### HU07
 Como usuario restaurante, quiero crear restaurantes y publicar productos en su menú.
 
