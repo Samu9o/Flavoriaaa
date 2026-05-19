@@ -38,10 +38,10 @@ export default function HomePage() {
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
-              href="/perfil"
+              href="/feed"
               className="inline-flex items-center gap-2 rounded-2xl border border-white/20 bg-white/5 px-7 py-4 text-base font-semibold text-white backdrop-blur-sm transition hover:bg-white/10"
             >
-              Crear cuenta
+              Ver comunidad
             </Link>
           </div>
 
