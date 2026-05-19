@@ -175,11 +175,23 @@ function hydrateStore(saved: string | null): AppStore {
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const [store, setStore] = useState<AppStore>(DEFAULT_STORE)
   const [hydrated, setHydrated] = useState(false)
+  const [jwtActive, setJwtActive] = useState(false)
 
   useEffect(() => {
     const nextStore = hydrateStore(typeof window === "undefined" ? null : localStorage.getItem(STORAGE_KEY))
     setStore(nextStore)
     setHydrated(true)
+    // Sincronizar con JWT existente al montar
+    setJwtActive(!!localStorage.getItem("flavoria_token"))
+  }, [])
+
+  // Escuchar cambios de autenticación JWT
+  useEffect(() => {
+    const handler = (e: Event) => {
+      setJwtActive((e as CustomEvent<{ active: boolean }>).detail.active)
+    }
+    window.addEventListener("flavoria:auth", handler)
+    return () => window.removeEventListener("flavoria:auth", handler)
   }, [])
 
   useEffect(() => {
@@ -296,8 +308,10 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     return { ok: true }
   }
 
+  const effectiveSesion = store.sesion || jwtActive
+
   const toggleFollowCook: UserContextType["toggleFollowCook"] = (targetUserId) => {
-    if (!store.sesion || !currentUser) {
+    if (!effectiveSesion || !currentUser) {
       return { ok: false, error: "Debes iniciar sesión para seguir a otros cocineros" }
     }
 
@@ -414,7 +428,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         puntosParaSiguiente: falta,
         progresoPorcentaje: porcentaje,
         agregarPuntos,
-        sesion: store.sesion,
+        sesion: effectiveSesion,
         toggleSesion,
         rol: currentUser?.expertiseRole ?? "foodie",
         setRol,

@@ -3,11 +3,12 @@ import "./globals.css"
 import Navbar from "@/components/Navbar"
 import { LanguageProvider } from "@/lib/i18n"
 import { UserProvider } from "@/lib/userContext"
+import { AuthProvider } from "@/lib/authContext"
 
 export const metadata: Metadata = {
-  title: "Flavoria Market - Restaurantes, comunidad, marketplace e IA",
+  title: "Flavoria — Restaurantes, comunidad y marketplace gastronómico",
   description:
-    "Marketplace gastronómico con restaurantes, menús, compras entre cuentas, tendencias en Bogotá e IA nutricional.",
+    "La alternativa colombiana a Rappi: restaurantes reales de Bogotá, comunidad gastronómica, recetas, foros e IA nutricional.",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -15,10 +16,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es">
       <body className="bg-surface min-h-screen font-mono">
         <LanguageProvider>
-          <UserProvider>
-            <Navbar />
-            <main>{children}</main>
-          </UserProvider>
+          <AuthProvider>
+            <UserProvider>
+              <Navbar />
+              <main>{children}</main>
+            </UserProvider>
+          </AuthProvider>
         </LanguageProvider>
       </body>
     </html>

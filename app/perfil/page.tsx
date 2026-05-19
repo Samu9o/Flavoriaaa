@@ -7,6 +7,7 @@ import { Building2, Save, ShieldCheck, ShoppingBag, Store, Tag, UserRoundPlus } 
 import { COMMUNITY_FEED_ITEMS, SPECIALTY_CATALOG } from "@/lib/communitySeed"
 import { normalizeSpecialtyTags, type AccountType, type ExpertiseRole } from "@/lib/communityLogic"
 import { useUser } from "@/lib/userContext"
+import { useAuth } from "@/lib/authContext"
 
 const niveles = ["basico", "bronce", "plata", "oro", "platino"]
 const bogotaLocalities = [
@@ -63,6 +64,12 @@ export default function PerfilPage() {
     getRestaurantName,
     getMenuItemName,
   } = useUser()
+  const { user: authUser, profileExt, updateProfile } = useAuth()
+
+  // Cuando hay sesión JWT, esa identidad tiene prioridad en el encabezado
+  const displayName  = authUser?.nombre  ?? currentUser?.name  ?? null
+  const displayEmail = authUser?.email   ?? currentUser?.email  ?? null
+  const displayRol   = authUser?.rol     ?? currentUser?.accountType ?? null
 
   const [feedback, setFeedback] = useState<string | null>(null)
   const [customTag, setCustomTag] = useState("")
@@ -70,6 +77,7 @@ export default function PerfilPage() {
   const [form, setForm] = useState({
     name: "",
     email: "",
+    password: "",
     bio: "",
     expertiseRole: "foodie" as ExpertiseRole,
     specialtyTags: [] as string[],
@@ -92,27 +100,34 @@ export default function PerfilPage() {
   })
 
   useEffect(() => {
-    if (sesion && currentUser) {
+    if (authUser) {
       setForm({
-        name: currentUser.name,
-        email: currentUser.email,
-        bio: currentUser.bio,
-        expertiseRole: currentUser.expertiseRole,
-        specialtyTags: currentUser.specialtyTags,
-        accountType: currentUser.accountType === "admin" ? "admin" : currentUser.accountType,
+        name:          authUser.nombre,
+        email:         authUser.email,
+        password:      "",
+        bio:           profileExt?.bio           ?? "",
+        expertiseRole: (profileExt?.expertiseRole as ExpertiseRole) ?? "foodie",
+        specialtyTags: profileExt?.specialtyTags ?? [],
+        accountType:   (authUser.rol === "admin" || authUser.rol === "consumer" || authUser.rol === "restaurant")
+                         ? authUser.rol as AccountType
+                         : "consumer",
       })
       return
     }
-
-    setForm({
-      name: "",
-      email: "",
-      bio: "",
-      expertiseRole: "foodie",
-      specialtyTags: [],
-      accountType: "consumer",
-    })
-  }, [sesion, currentUser])
+    if (sesion && currentUser) {
+      setForm({
+        name:          currentUser.name,
+        email:         currentUser.email,
+        password:      "",
+        bio:           currentUser.bio,
+        expertiseRole: currentUser.expertiseRole,
+        specialtyTags: currentUser.specialtyTags,
+        accountType:   currentUser.accountType === "admin" ? "admin" : currentUser.accountType,
+      })
+      return
+    }
+    setForm({ name: "", email: "", password: "", bio: "", expertiseRole: "foodie", specialtyTags: [], accountType: "consumer" })
+  }, [authUser, sesion, currentUser, profileExt])
 
   useEffect(() => {
     if (!menuForm.restaurantId && myRestaurants[0]) {
@@ -161,9 +176,28 @@ export default function PerfilPage() {
     setCustomTag("")
   }
 
-  const handleProfileSubmit = () => {
+  const handleProfileSubmit = async () => {
+    if (authUser) {
+      try {
+        await updateProfile({
+          nombre:        form.name      || undefined,
+          email:         form.email     || undefined,
+          password:      form.password  || undefined,
+          bio:           form.bio,
+          expertiseRole: form.expertiseRole,
+          specialtyTags: form.specialtyTags,
+        })
+        setForm((prev) => ({ ...prev, password: "" }))
+        setFeedback("Perfil actualizado correctamente.")
+      } catch (err: unknown) {
+        setFeedback(err instanceof Error ? err.message : "No fue posible guardar la información")
+      }
+      return
+    }
+
+    const { password: _pw, ...formWithoutPassword } = form
     const payload = {
-      ...form,
+      ...formWithoutPassword,
       accountType: form.accountType === "admin" ? currentUser?.accountType ?? "admin" : form.accountType,
     }
     const action = sesion ? saveProfile(payload) : registerProfile(payload)
@@ -241,36 +275,48 @@ export default function PerfilPage() {
 
       <div className="mb-6 rounded-3xl bg-white p-6 shadow-sm">
         <div className="flex flex-col gap-5 md:flex-row md:items-center">
-          <Image
-            src={currentUser?.avatar ?? "https://i.pravatar.cc/150?img=5"}
-            alt={currentUser?.name ?? "Usuario nuevo"}
-            width={100}
-            height={100}
-            className="h-20 w-20 rounded-full border-4 border-orange-100 object-cover"
-          />
+          {/* Avatar: inicial para cuentas JWT, foto para cuentas mock */}
+          {authUser ? (
+            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-orange-500 to-red-600 text-3xl font-black text-white border-4 border-orange-100">
+              {authUser.nombre.charAt(0).toUpperCase()}
+            </div>
+          ) : (
+            <Image
+              src={currentUser?.avatar ?? "https://i.pravatar.cc/150?img=5"}
+              alt={currentUser?.name ?? "Usuario nuevo"}
+              width={100}
+              height={100}
+              className="h-20 w-20 rounded-full border-4 border-orange-100 object-cover"
+            />
+          )}
 
           <div className="flex-1">
             <div className="flex flex-wrap items-center gap-3">
               <div>
                 <h1 className="text-xl font-bold text-gray-900">
-                  {currentUser?.name ?? "Crea tu perfil en Flavoria Market"}
+                  {displayName ?? "Crea tu perfil en Flavoria Market"}
                 </h1>
                 <p className="text-sm text-gray-500">
-                  {currentUser?.bio ??
-                    "Regístrate como restaurante o consumidor para publicar, comprar y participar en la comunidad."}
+                  {authUser ? displayEmail : (currentUser?.bio ?? "Regístrate como restaurante o consumidor para publicar, comprar y participar en la comunidad.")}
                 </p>
               </div>
-              {sesion && currentUser && (
+              {(authUser || (sesion && currentUser)) && (
                 <>
-                  <span className="rounded-full bg-orange-50 px-3 py-1 text-xs font-semibold text-orange-600">
-                    {roleLabel[currentUser.platformRole]}
-                  </span>
-                  <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">
-                    {accountLabel[currentUser.accountType]}
-                  </span>
-                  <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">
-                    {expertiseLabel[currentUser.expertiseRole]}
-                  </span>
+                  {displayRol && (
+                    <span className="rounded-full bg-orange-50 px-3 py-1 text-xs font-semibold text-orange-600 capitalize">
+                      {accountLabel[displayRol as AccountType] ?? displayRol}
+                    </span>
+                  )}
+                  {!authUser && currentUser && (
+                    <>
+                      <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">
+                        {roleLabel[currentUser.platformRole]}
+                      </span>
+                      <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">
+                        {expertiseLabel[currentUser.expertiseRole]}
+                      </span>
+                    </>
+                  )}
                 </>
               )}
             </div>
@@ -332,7 +378,6 @@ export default function PerfilPage() {
           <div className="mb-4 flex items-center gap-2">
             <UserRoundPlus className="h-5 w-5 text-orange-500" />
             <div>
-              <p className="text-sm font-semibold uppercase tracking-wide text-orange-500">HU02</p>
               <h2 className="text-xl font-bold text-gray-900">
                 {sesion ? "Gestiona tu perfil" : "Regístrate en la plataforma"}
               </h2>
@@ -357,6 +402,19 @@ export default function PerfilPage() {
                 className="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2"
               />
             </label>
+
+            {authUser && (
+              <label className="text-sm font-medium text-gray-700 md:col-span-2">
+                Nueva contraseña (opcional)
+                <input
+                  type="password"
+                  value={form.password}
+                  onChange={(e) => setForm((prev) => ({ ...prev, password: e.target.value }))}
+                  placeholder="Dejar en blanco para no cambiar"
+                  className="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2"
+                />
+              </label>
+            )}
 
             <label className="text-sm font-medium text-gray-700 md:col-span-2">
               Biografía
@@ -446,7 +504,7 @@ export default function PerfilPage() {
             className="mt-6 inline-flex items-center gap-2 rounded-xl bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600"
           >
             <Save className="h-4 w-4" />
-            {sesion ? "Guardar cambios" : "Registrarme"}
+            {authUser || sesion ? "Guardar cambios" : "Registrarme"}
           </button>
         </section>
 
@@ -727,7 +785,6 @@ export default function PerfilPage() {
           <div className="mb-4 flex items-center gap-2">
             <ShieldCheck className="h-5 w-5 text-orange-500" />
             <div>
-              <p className="text-sm font-semibold uppercase tracking-wide text-orange-500">HU01</p>
               <h2 className="text-xl font-bold text-gray-900">Asignación de roles</h2>
               <p className="text-sm text-gray-500">
                 Como administrador puedes delegar moderación y soporte dentro de la comunidad.
