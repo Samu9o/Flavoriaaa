@@ -117,7 +117,7 @@ const translations: Record<Language, TranslationDictionary> = {
 
     "ai.badge": "Asistente de IA",
     "ai.title": "Plan nutricional personalizado",
-    "ai.subtitle": "Genera una guía nutricional equilibrada en español, inglés o francés usando la API de OpenAI.",
+    "ai.subtitle": "Genera una guía nutricional equilibrada y personalizada en español, inglés o francés con inteligencia artificial.",
     "ai.disclaimer": "La herramienta da orientación general y evita dietas extremas. Consulta a un profesional de salud si eres menor de edad, tienes una condición médica o necesitas un tratamiento específico.",
     "ai.form.height": "Altura (cm)",
     "ai.form.weight": "Peso (kg)",
@@ -247,7 +247,7 @@ const translations: Record<Language, TranslationDictionary> = {
 
     "ai.badge": "AI assistant",
     "ai.title": "Personalized nutrition plan",
-    "ai.subtitle": "Generate a balanced nutrition guide in Spanish, English, or French using the OpenAI API.",
+    "ai.subtitle": "Generate a balanced, personalized nutrition guide in Spanish, English, or French using artificial intelligence.",
     "ai.disclaimer": "This tool provides general guidance and avoids extreme diets. Talk to a healthcare professional if you are under 18, have a medical condition, or need treatment-specific advice.",
     "ai.form.height": "Height (cm)",
     "ai.form.weight": "Weight (kg)",
@@ -377,7 +377,7 @@ const translations: Record<Language, TranslationDictionary> = {
 
     "ai.badge": "Assistant IA",
     "ai.title": "Plan nutritionnel personnalisé",
-    "ai.subtitle": "Générez un guide nutritionnel équilibré en espagnol, anglais ou français grâce à l'API OpenAI.",
+    "ai.subtitle": "Générez un guide nutritionnel équilibré et personnalisé en espagnol, anglais ou français grâce à l'intelligence artificielle.",
     "ai.disclaimer": "Cet outil fournit une orientation générale et évite les régimes extrêmes. Parlez à un professionnel de santé si vous avez moins de 18 ans, une condition médicale, ou si vous avez besoin d'un conseil spécifique.",
     "ai.form.height": "Taille (cm)",
     "ai.form.weight": "Poids (kg)",

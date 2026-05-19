@@ -8,14 +8,11 @@ import {
 
 export const runtime = "nodejs"
 
-type OpenAIResponsePayload = {
-  output?: Array<{
-    type?: string
-    role?: string
-    content?: Array<{
-      type?: string
-      text?: string
-    }>
+type ChatCompletionResponse = {
+  choices?: Array<{
+    message?: {
+      content?: string
+    }
   }>
   error?: {
     message?: string
@@ -38,7 +35,7 @@ function buildMockPlan(input: NutritionPlanInput) {
         : "media"
 
   if (input.language === "en") {
-    return `Demo mode (mockup): this nutrition plan was generated without connecting to OpenAI.
+    return `Demo mode: this nutrition plan was generated without AI.
 
 1. Safety note
 Keep your goal realistic and avoid extreme restrictions.
@@ -66,7 +63,7 @@ If you have medical conditions, severe allergies, or are under 18, consult a lic
   }
 
   if (input.language === "fr") {
-    return `Mode démo (mockup) : ce plan nutritionnel a été généré sans connexion à OpenAI.
+    return `Mode démo : ce plan nutritionnel a été généré sans IA.
 
 1. Note de sécurité
 Gardez un objectif réaliste et évitez les restrictions extrêmes.
@@ -93,7 +90,7 @@ Buvez 6-8 verres d'eau, dormez 7-8 heures, et ajustez les portions selon votre n
 En cas de condition médicale, d'allergies sévères ou si vous avez moins de 18 ans, consultez un professionnel de la nutrition.`
   }
 
-  return `Modo demo (mockup): este plan nutricional fue generado sin conectar con OpenAI.
+  return `Modo demo: este plan nutricional fue generado sin IA activa.
 
 1. Nota de seguridad
 Mantén un objetivo realista y evita restricciones extremas.
@@ -120,17 +117,6 @@ Bebe 6-8 vasos de agua, duerme 7-8 horas y ajusta porciones según tu actividad 
 Si tienes condiciones médicas, alergias severas o eres menor de edad, consulta a un nutricionista.`
 }
 
-function extractOutputText(payload: OpenAIResponsePayload) {
-  return (
-    payload.output
-      ?.flatMap((item) => (item.type === "message" ? item.content ?? [] : []))
-      .filter((part) => part.type === "output_text")
-      .map((part) => part.text ?? "")
-      .join("\n")
-      .trim() ?? ""
-  )
-}
-
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as Partial<NutritionPlanInput>
@@ -143,43 +129,38 @@ export async function POST(request: Request) {
     const apiKey = process.env.OPENAI_API_KEY
     const mockMode = isMockModeEnabled()
 
-    if (mockMode) {
+    if (mockMode || !apiKey) {
       return NextResponse.json({ plan: buildMockPlan(validation.data), mock: true })
     }
 
-    if (!apiKey) {
-      return NextResponse.json({ plan: buildMockPlan(validation.data), mock: true })
-    }
-
-    const apiResponse = await fetch("https://api.openai.com/v1/responses", {
+    const apiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "gpt-5-mini",
-        instructions: NUTRITION_SYSTEM_PROMPT,
-        input: buildNutritionPrompt(validation.data),
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: NUTRITION_SYSTEM_PROMPT },
+          { role: "user",   content: buildNutritionPrompt(validation.data) },
+        ],
+        max_tokens: 1500,
+        temperature: 0.7,
       }),
       cache: "no-store",
     })
 
-    const payload = (await apiResponse.json()) as OpenAIResponsePayload
+    const payload = (await apiResponse.json()) as ChatCompletionResponse
 
     if (!apiResponse.ok) {
-      console.error("OpenAI error. Using mock plan fallback:", payload.error?.message)
+      console.error("AI error, using mock fallback:", payload.error?.message)
       return NextResponse.json({ plan: buildMockPlan(validation.data), mock: true })
     }
 
-    const plan = extractOutputText(payload)
+    const plan = payload.choices?.[0]?.message?.content?.trim() ?? ""
 
     if (!plan) {
-      console.error(
-        "OpenAI respondió sin texto utilizable:",
-        JSON.stringify(payload, null, 2),
-      )
-
       return NextResponse.json(
         { error: "No fue posible generar el plan nutricional." },
         { status: 502 },
@@ -189,7 +170,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ plan, mock: false })
   } catch (error) {
     console.error("nutrition-plan-route", error)
-
     return NextResponse.json({ error: "No fue posible generar el plan nutricional." }, { status: 500 })
   }
 }
