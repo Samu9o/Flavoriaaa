@@ -366,14 +366,20 @@ export default function Navbar() {
           {/* Dropdowns renderizados FUERA del contenedor overflow-x-auto */}
           {NAV_GROUPS.map((group) => {
             if (!("items" in group) || !group.items || openGroup !== group.id) return null
-            // offsetLeft del botón real para posición exacta
-            const leftPx = groupBtnRefs.current[group.id]?.offsetLeft ?? 16
+
+            // getBoundingClientRect da la posición visual real (funciona con scroll horizontal en móvil)
+            const btn = groupBtnRefs.current[group.id]
+            const btnLeft = btn?.getBoundingClientRect().left ?? 16
+            const DROPDOWN_W = 240
+            const viewportW = typeof window !== "undefined" ? window.innerWidth : 1200
+            // Clamp para que nunca salga del borde derecho del viewport
+            const leftPx = Math.min(Math.max(0, btnLeft), viewportW - DROPDOWN_W - 8)
 
             return (
               <div
                 key={group.id}
-                style={{ left: leftPx }}
-                className="absolute top-full z-[60] min-w-[230px] overflow-hidden rounded-b-2xl rounded-tr-2xl border border-white/10 bg-[#120400] shadow-2xl shadow-black/60"
+                style={{ left: leftPx, width: Math.min(DROPDOWN_W, viewportW - 16) }}
+                className="absolute top-full z-[60] overflow-hidden rounded-b-2xl rounded-tr-2xl border border-white/10 bg-[#120400] shadow-2xl shadow-black/60"
               >
                 {group.items.map((item) => {
                   const itemActive = pathname === item.href
