@@ -127,7 +127,7 @@ export default function AuthModal({ open, onClose, defaultTab = "login" }: Props
     return (
       <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
         <div className="absolute inset-0 bg-black/75 backdrop-blur-md" onClick={onClose} aria-hidden />
-        <div className="relative w-full max-w-md overflow-hidden rounded-3xl bg-[#0d0500] border border-white/10 shadow-2xl shadow-black/60">
+        <div className="relative w-full max-w-md max-h-[90vh] overflow-y-auto overflow-x-hidden rounded-3xl bg-[#0d0500] border border-white/10 shadow-2xl shadow-black/60">
           {/* Close */}
           <button onClick={onClose} className="absolute right-4 top-4 z-10 rounded-full p-1.5 text-gray-400 hover:bg-white/10 hover:text-white transition">
             <X className="h-5 w-5" />
@@ -198,7 +198,7 @@ export default function AuthModal({ open, onClose, defaultTab = "login" }: Props
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/75 backdrop-blur-md" onClick={onClose} aria-hidden />
 
-      <div className="relative w-full max-w-md overflow-hidden rounded-3xl bg-[#0d0500] border border-white/10 shadow-2xl shadow-black/60">
+      <div className="relative w-full max-w-md max-h-[90vh] overflow-y-auto overflow-x-hidden rounded-3xl bg-[#0d0500] border border-white/10 shadow-2xl shadow-black/60">
         {/* Header */}
         <div className="relative overflow-hidden px-8 pt-8 pb-5 text-center">
           <div className="absolute inset-0 bg-gradient-to-br from-orange-600/20 via-transparent to-red-800/20" />
